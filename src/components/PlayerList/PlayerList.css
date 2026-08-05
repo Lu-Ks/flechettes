@@ -1,0 +1,47 @@
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+.player-list__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.player-list__row--btn {
+  width: 100%;
+  border: none;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.player-list__row > .player-badge {
+  flex: 1;
+}
+
+.player-list__row.is-highlighted {
+  background: rgba(52, 199, 89, 0.18);
+}
+
+.player-list__position {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent-yellow);
+  border: 1px solid var(--color-accent-yellow);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
+.player-list__score {
+  font-size: 1.3rem;
+  font-weight: 700;
+}

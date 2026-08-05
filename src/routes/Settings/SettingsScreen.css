@@ -1,0 +1,66 @@
+.settings-screen__section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-screen__section-title {
+  color: var(--color-text-dim);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 6px;
+}
+
+.settings-screen__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 1rem;
+}
+
+.settings-screen__row input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-accent-green);
+}
+
+.settings-screen__row select {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+
+.settings-screen__install {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--color-accent-green);
+  color: #06210f;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.settings-screen__install-hint {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+}
+
+.settings-screen__reset {
+  margin: 20px 16px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-danger);
+  background: none;
+  color: var(--color-danger);
+  font-weight: 700;
+  cursor: pointer;
+}

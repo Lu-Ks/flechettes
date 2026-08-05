@@ -1,0 +1,123 @@
+.score-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0;
+  padding: 14px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-align: left;
+}
+
+.score-chart__toggle {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+}
+
+.score-chart__toggle-btn {
+  flex: 1;
+  padding: 8px 6px;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 2px);
+  background: none;
+  color: var(--color-text-dim);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.score-chart__toggle-btn.is-active {
+  background: var(--color-accent-green);
+  color: #06210f;
+}
+
+.score-chart__svg {
+  width: 100%;
+  height: auto;
+  touch-action: pan-y;
+  overflow: visible;
+}
+
+.score-chart__gridline {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.score-chart__axis-label {
+  fill: var(--color-text-dim);
+  font-size: 8px;
+}
+
+.score-chart__crosshair {
+  stroke: var(--color-text-dim);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.score-chart__line {
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.score-chart__end-dot {
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+
+.score-chart__end-label {
+  font-size: 8px;
+  font-weight: 700;
+  fill: var(--color-text);
+}
+
+.score-chart__tooltip {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+}
+
+.score-chart__tooltip-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.score-chart__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  padding: 2px 0;
+}
+
+.score-chart__tooltip-key {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.score-chart__tooltip-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.score-chart__tooltip-value {
+  font-weight: 800;
+}
+
+.score-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding-top: 2px;
+}

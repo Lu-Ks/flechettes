@@ -1,0 +1,83 @@
+.number-pad {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+.number-pad__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.number-pad__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr 1fr;
+  gap: 8px;
+}
+
+.number-pad__multi-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.number-pad__multi-stack .number-pad__btn {
+  flex: 1;
+  min-height: 0;
+  padding: 4px;
+  font-size: 0.75rem;
+}
+
+.number-pad__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.05s ease, background 0.15s ease;
+}
+
+.number-pad__btn:active {
+  transform: scale(0.95);
+}
+
+.number-pad__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.number-pad__btn--bull {
+  background: var(--color-accent-green);
+  color: #0a3d1c;
+  border-color: var(--color-accent-green);
+}
+
+.number-pad__btn--miss {
+  background: var(--color-bg);
+}
+
+.number-pad__btn--multi {
+  background: linear-gradient(180deg, var(--color-accent-orange), #e08600);
+  color: #3a2200;
+  border-color: var(--color-accent-orange);
+}
+
+.number-pad__btn--multi.is-active {
+  outline: 3px solid var(--color-accent-yellow);
+  outline-offset: -3px;
+}
+
+.number-pad__btn--undo {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
+  font-size: 1.6rem;
+}

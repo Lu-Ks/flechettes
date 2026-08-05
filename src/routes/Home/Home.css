@@ -1,0 +1,131 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 20px 20px 12px;
+  text-align: center;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.home__title {
+  flex-shrink: 0;
+}
+
+.home__title h1 {
+  font-size: clamp(2.4rem, 10vw, 3.2rem);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.home__subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--color-text-dim);
+  margin-top: 4px;
+}
+
+.home__dash {
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+}
+
+.home__dash--green {
+  background: var(--color-accent-green);
+}
+
+.home__dash--red {
+  background: var(--color-accent-red);
+}
+
+.home__resume {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-accent-green);
+  background: rgba(52, 199, 89, 0.12);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.home__resume-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-green);
+}
+
+.home__resume-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home__resume-score {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.home__resume-cta {
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-green);
+  color: #06210f;
+  font-weight: 800;
+}
+
+.home__new-game {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  margin: 4px 0 0;
+}
+
+.home__score-choice {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.home__score-btn {
+  padding: 18px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.home__dartboard-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.home__dartboard {
+  width: 100%;
+  max-width: 260px;
+  max-height: 100%;
+  object-fit: contain;
+}

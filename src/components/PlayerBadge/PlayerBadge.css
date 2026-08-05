@@ -1,0 +1,44 @@
+.player-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dart-icon {
+  flex-shrink: 0;
+}
+
+.player-badge--sm {
+  font-size: 0.85rem;
+}
+
+.player-badge--sm .dart-icon {
+  font-size: 1.1rem;
+}
+
+.player-badge--md {
+  font-size: 1rem;
+}
+
+.player-badge--md .dart-icon {
+  font-size: 1.5rem;
+}
+
+.player-badge--lg {
+  font-size: 1.4rem;
+}
+
+.player-badge--lg .dart-icon {
+  font-size: 2rem;
+}
+
+.player-badge__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}

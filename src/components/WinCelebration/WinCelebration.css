@@ -1,0 +1,82 @@
+.win-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 51;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  animation: win-backdrop 2.8s ease forwards;
+}
+
+.win-celebration__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+  padding: 24px 28px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent-yellow);
+  box-shadow: 0 0 48px rgba(232, 166, 21, 0.55);
+  text-align: center;
+  animation: win-pop 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.win-celebration__icon {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 4px;
+}
+
+.win-celebration__winner {
+  margin: 2px 0;
+}
+
+.win-celebration__text {
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-yellow);
+}
+
+@keyframes win-backdrop {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  12% {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  82% {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes win-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1.08) translateY(0);
+  }
+  24% {
+    transform: scale(1);
+  }
+  82% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-6px);
+  }
+}

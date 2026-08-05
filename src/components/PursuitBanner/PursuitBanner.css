@@ -1,0 +1,117 @@
+.pursuit-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: calc(100% - 24px);
+  margin: 6px 12px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-green);
+  color: #06210f;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pursuit-banner__icon {
+  flex-shrink: 0;
+  animation: pursuit-chase-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes pursuit-chase-pulse {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+}
+
+.pursuit-banner__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pursuit-banner__chase {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pursuit-banner__chase strong {
+  font-size: 0.95rem;
+}
+
+.pursuit-banner__name {
+  text-transform: none;
+}
+
+.pursuit-banner__arrow {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.pursuit-banner__combo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pursuit-banner__combo-dart {
+  min-width: 28px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.22);
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.pursuit-banner__detail-score {
+  margin: 4px 0 0;
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.pursuit-banner__detail-aim {
+  margin: 2px 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent-green);
+  text-transform: uppercase;
+}
+
+.pursuit-banner__detail-combo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.pursuit-banner__combo-dart--big {
+  min-width: 44px;
+  padding: 8px 12px;
+  font-size: 1.1rem;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+.pursuit-banner__detail-explain {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+}
