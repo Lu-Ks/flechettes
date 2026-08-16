@@ -1,5 +1,5 @@
 import type { EngineGameState } from '../../state/gameEngine'
-import { buildTurnHistory, getAverage, getStandings } from '../../state/gameEngine'
+import { buildStandingsSummary, buildTurnHistory } from '../../state/gameEngine'
 import { TurnHistory } from '../TurnHistory/TurnHistory'
 import './GameHistoryModal.css'
 
@@ -23,15 +23,7 @@ export function GameHistoryModal({
   const entry = {
     turns: buildTurnHistory(game),
     players: game.order.map((id) => game.players[id].player),
-    standings: getStandings(game).map((p, idx) => ({
-      playerId: p.player.id,
-      playerName: p.player.name,
-      position: p.finishedPosition ?? idx + 1,
-      dartsThrown: p.dartsThrown,
-      average: getAverage(p),
-      pursuitsWon: p.pursuitsWon,
-      remaining: p.remaining,
-    })),
+    standings: buildStandingsSummary(game),
   }
 
   return (

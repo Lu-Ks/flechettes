@@ -8,6 +8,13 @@ export interface Player {
   color: PlayerColor
 }
 
+export interface Team {
+  id: string
+  name: string
+  color: PlayerColor
+  memberIds: string[] // throw rotation order
+}
+
 export interface Throw {
   value: number // 0-20 or 25
   multiplier: 1 | 2 | 3
@@ -15,6 +22,7 @@ export interface Throw {
 
 export interface TurnRecord {
   playerId: string
+  throwerId?: string | null // which team member threw this turn (team mode only)
   throws: Throw[]
   scoreBefore: number
   scoreAfter: number
@@ -29,15 +37,27 @@ export interface GameSettings {
   randomOrder: boolean
   doubleOut: boolean
   pursuitMode: boolean
+  teamMode: boolean
+  teams?: Team[] // present when teamMode is true
+}
+
+export interface MemberStats {
+  dartsThrown: number
+  pointsScored: number
 }
 
 export interface PlayerGameState {
-  player: Player
+  player: Player // for a team: a synthetic identity {id: team.id, name: team.name, color: team.color}
   remaining: number
   dartsThrown: number
   pointsScored: number
   pursuitsWon: number
   finishedPosition: number | null
+  team?: {
+    members: Player[] // real people, in throw rotation order
+    throwerIndex: number // who throws this team's current/next turn
+    memberStats: Record<string, MemberStats>
+  }
 }
 
 export type GameStatus = 'in_progress' | 'finished' | 'cancelled'
@@ -72,5 +92,6 @@ export interface GameHistoryEntry {
     average: number
     pursuitsWon: number
     remaining: number
+    members?: { playerId: string; playerName: string; dartsThrown: number; average: number }[]
   }[]
 }

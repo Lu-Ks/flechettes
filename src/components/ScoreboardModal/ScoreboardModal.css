@@ -111,3 +111,32 @@
   align-items: center;
   gap: 4px;
 }
+
+.scoreboard-modal__members {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-border);
+}
+
+.scoreboard-modal__member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+}
+
+.scoreboard-modal__member .is-throwing {
+  color: var(--color-accent-green);
+  font-weight: 700;
+}
+
+.scoreboard-modal__member-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}

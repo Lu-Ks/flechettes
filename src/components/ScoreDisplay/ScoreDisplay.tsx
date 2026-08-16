@@ -9,15 +9,17 @@ interface ScoreDisplayProps {
   dartsThrown: number
   average: number
   turnThrows: Throw[]
+  throwerName?: string
 }
 
-export function ScoreDisplay({ score, dartsThrown, average, turnThrows }: ScoreDisplayProps) {
+export function ScoreDisplay({ score, dartsThrown, average, turnThrows, throwerName }: ScoreDisplayProps) {
   const cells = [0, 1, 2].map((i) => turnThrows[i])
   const turnTotal = turnThrows.reduce((sum, t) => sum + t.value * t.multiplier, 0)
   const lastIndex = turnThrows.length - 1
 
   return (
     <div className="score-display">
+      {throwerName && <div className="score-display__thrower">Au lancer : {throwerName}</div>}
       <div className="score-display__main">
         <span className="score-display__score">{score}</span>
         <div className="score-display__stats">

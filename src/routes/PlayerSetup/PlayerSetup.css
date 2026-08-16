@@ -12,11 +12,92 @@
   margin-top: 8px;
 }
 
+.player-setup__mode {
+  display: flex;
+  gap: 8px;
+  margin: 0 16px;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.player-setup__mode-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-dim);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.player-setup__mode-btn.is-active {
+  background: var(--color-accent-green);
+  color: #06210f;
+}
+
 .player-setup__list {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 0 16px;
+}
+
+.player-setup__teams {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 16px;
+}
+
+.player-setup__team {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.player-setup__team-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-setup__team-name {
+  font-size: 1.05rem;
+}
+
+.player-setup__team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--color-border);
+}
+
+.player-setup__team-members .player-setup__row {
+  padding: 8px 10px;
+}
+
+.player-setup__add-member {
+  align-self: flex-start;
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--color-border);
+  background: none;
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .player-setup__row {
@@ -45,6 +126,11 @@
   font-size: 1.4rem;
   cursor: pointer;
   padding: 2px 6px;
+}
+
+.player-setup__remove:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
 }
 
 .player-setup__add {

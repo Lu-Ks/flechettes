@@ -7,8 +7,7 @@ import {
   finishGame as engineFinishGame,
   replayUpToTurn,
   buildTurnHistory,
-  getAverage,
-  getStandings,
+  buildStandingsSummary,
 } from './gameEngine'
 import { getCurrentGame, saveCurrentGame, appendHistory, savePlayers } from '../storage/localStorage'
 import type { GameHistoryEntry, GameSettings, Player, TurnRecord } from './types'
@@ -125,15 +124,7 @@ let lastRecordedGameId: string | null = null
 function recordHistory(game: EngineGameState) {
   if (lastRecordedGameId === game.id) return
   lastRecordedGameId = game.id
-  const standings = getStandings(game).map((p, idx) => ({
-    playerId: p.player.id,
-    playerName: p.player.name,
-    position: p.finishedPosition ?? idx + 1,
-    dartsThrown: p.dartsThrown,
-    average: getAverage(p),
-    pursuitsWon: p.pursuitsWon,
-    remaining: p.remaining,
-  }))
+  const standings = buildStandingsSummary(game)
   const entry: GameHistoryEntry = {
     id: game.id,
     date: game.createdAt,

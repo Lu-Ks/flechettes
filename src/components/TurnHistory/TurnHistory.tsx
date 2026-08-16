@@ -24,6 +24,9 @@ export function TurnHistory({ entry, onSelectTurn, resumeLabel = 'Rejouer à par
 
   const playersById = new Map((entry.players ?? []).map((p) => [p.id, p]))
   const positionByPlayerId = new Map(entry.standings.map((s) => [s.playerId, s.position]))
+  const throwerNameById = new Map(
+    entry.standings.flatMap((s) => (s.members ?? []).map((m) => [m.playerId, m.playerName] as const)),
+  )
 
   return (
     <div className="turn-history">
@@ -38,6 +41,7 @@ export function TurnHistory({ entry, onSelectTurn, resumeLabel = 'Rejouer à par
 
       {entry.turns.map((turn, i) => {
         const player = playersById.get(turn.playerId)
+        const throwerName = turn.throwerId ? throwerNameById.get(turn.throwerId) : null
         const turnScore = turn.throws.reduce((sum, t) => sum + t.value * t.multiplier, 0)
         const targets = (turn.pursuitTargetIds ?? []).map((id) => playersById.get(id)?.name ?? id)
         const isExpanded = expandedTurn === i
@@ -60,11 +64,14 @@ export function TurnHistory({ entry, onSelectTurn, resumeLabel = 'Rejouer à par
             >
               <div className="turn-history__main">
                 <span className="turn-history__index">#{i + 1}</span>
-                {player ? (
-                  <PlayerBadge color={player.color} name={player.name} size="sm" />
-                ) : (
-                  <span className="turn-history__name">{turn.playerId}</span>
-                )}
+                <span className="turn-history__player">
+                  {player ? (
+                    <PlayerBadge color={player.color} name={player.name} size="sm" />
+                  ) : (
+                    <span className="turn-history__name">{turn.playerId}</span>
+                  )}
+                  {throwerName && <span className="turn-history__thrower">{throwerName}</span>}
+                </span>
                 <span className="turn-history__throws">{turn.throws.map(formatThrow).join('  ')}</span>
                 <span className="turn-history__score">{turn.bust ? 'BUST' : turnScore}</span>
                 <span className="turn-history__remaining">{turn.scoreAfter}</span>

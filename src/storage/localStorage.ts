@@ -1,7 +1,8 @@
-import type { GameHistoryEntry, GameState, Player } from '../state/types'
+import type { GameHistoryEntry, GameState, Player, Team } from '../state/types'
 
 const KEYS = {
   players: 'mori-score:players',
+  teams: 'mori-score:teams',
   currentGame: 'mori-score:currentGame',
   history: 'mori-score:history',
   settings: 'mori-score:settings',
@@ -27,6 +28,14 @@ export function getPlayers(): Player[] {
 
 export function savePlayers(players: Player[]): void {
   write(KEYS.players, players)
+}
+
+export function getTeams(): Team[] {
+  return read<Team[]>(KEYS.teams, [])
+}
+
+export function saveTeams(teams: Team[]): void {
+  write(KEYS.teams, teams)
 }
 
 export function getCurrentGame(): GameState | null {

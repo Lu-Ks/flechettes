@@ -90,6 +90,31 @@
   color: var(--color-text-dim);
 }
 
+.result__standing-members {
+  margin-top: 4px;
+  margin-left: 42px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+}
+
+.result__members {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.result__member-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
 .result__actions {
   width: 100%;
   margin-top: 20px;

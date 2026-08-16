@@ -7,6 +7,13 @@
   flex-shrink: 0;
 }
 
+.score-display__thrower {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  letter-spacing: 0.02em;
+}
+
 .score-display__main {
   display: flex;
   align-items: center;

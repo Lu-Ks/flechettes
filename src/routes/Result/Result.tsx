@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../../state/useGame'
-import { buildTurnHistory, getAverage, getStandings } from '../../state/gameEngine'
+import { buildTurnHistory, getAverage, getMemberAverage, getStandings } from '../../state/gameEngine'
 import { PlayerBadge } from '../../components/PlayerBadge/PlayerBadge'
 import { ScoreChart } from '../../components/ScoreChart/ScoreChart'
 import { Icon } from '../../components/Icon/Icon'
@@ -72,6 +72,21 @@ export function Result() {
         </div>
       </div>
 
+      {winner.team && (
+        <div className="result__members">
+          {winner.team.members.map((m) => (
+            <div className="result__member-row" key={m.id}>
+              <span>{m.name}</span>
+              <span>
+                <Icon src={flechetteIcon} size="0.85em" /> {winner.team!.memberStats[m.id]?.dartsThrown ?? 0}
+                {' · '}
+                <Icon src={moyenneIcon} size="0.85em" /> {getMemberAverage(winner, m.id).toFixed(2)}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
       {rest.length > 0 && (
         <div className="result__standings">
           {rest.map((p, idx) => (
@@ -86,6 +101,15 @@ export function Result() {
                 <Icon src={moyenneIcon} size="0.85em" /> {getAverage(p).toFixed(2)} ·{' '}
                 <Icon src={poursuiteIcon} size="0.85em" /> {p.pursuitsWon}
               </div>
+              {p.team && (
+                <div className="result__standing-members">
+                  {p.team.members.map((m) => (
+                    <span key={m.id}>
+                      {m.name} ({getMemberAverage(p, m.id).toFixed(2)})
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

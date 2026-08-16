@@ -1,4 +1,5 @@
 import type {
+  GameHistoryEntry,
   GameSettings,
   GameState,
   Player,
@@ -15,6 +16,8 @@ interface PursuitEffect {
 
 interface LogEntry {
   playerId: string
+  throwerId: string | null // team member who threw (team mode only)
+  throwerIndexBefore: number | null
   throwValue: Throw
   remainingBefore: number
   remainingAfter: number
@@ -49,16 +52,36 @@ function shuffle<T>(items: T[]): T[] {
 
 function buildInitialState(players: Player[], order: string[], settings: GameSettings): EngineGameState {
   const playerStates: Record<string, PlayerGameState> = {}
-  players.forEach((player) => {
-    playerStates[player.id] = {
-      player,
-      remaining: settings.startScore,
-      dartsThrown: 0,
-      pointsScored: 0,
-      pursuitsWon: 0,
-      finishedPosition: null,
-    }
-  })
+  if (settings.teamMode && settings.teams?.length) {
+    const byId = new Map(players.map((p) => [p.id, p]))
+    settings.teams.forEach((team) => {
+      const members = team.memberIds.map((id) => byId.get(id)).filter((p): p is Player => Boolean(p))
+      playerStates[team.id] = {
+        player: { id: team.id, name: team.name, color: team.color },
+        remaining: settings.startScore,
+        dartsThrown: 0,
+        pointsScored: 0,
+        pursuitsWon: 0,
+        finishedPosition: null,
+        team: {
+          members,
+          throwerIndex: 0,
+          memberStats: Object.fromEntries(members.map((m) => [m.id, { dartsThrown: 0, pointsScored: 0 }])),
+        },
+      }
+    })
+  } else {
+    players.forEach((player) => {
+      playerStates[player.id] = {
+        player,
+        remaining: settings.startScore,
+        dartsThrown: 0,
+        pointsScored: 0,
+        pursuitsWon: 0,
+        finishedPosition: null,
+      }
+    })
+  }
 
   return {
     id: generateId(),
@@ -76,8 +99,13 @@ function buildInitialState(players: Player[], order: string[], settings: GameSet
   }
 }
 
+function buildOrder(players: Player[], settings: GameSettings, randomize: boolean): string[] {
+  const entities: { id: string }[] = settings.teamMode && settings.teams?.length ? settings.teams : players
+  return (randomize ? shuffle(entities) : entities).map((e) => e.id)
+}
+
 export function createGame(players: Player[], settings: GameSettings): EngineGameState {
-  const order = (settings.randomOrder ? shuffle(players) : players).map((p) => p.id)
+  const order = buildOrder(players, settings, settings.randomOrder)
   return buildInitialState(players, order, settings)
 }
 
@@ -92,8 +120,8 @@ export function replayUpToTurn(
   turns: TurnRecord[],
   turnIndex: number,
 ): EngineGameState {
-  // Players are already stored in their actual play order — never reshuffle on replay.
-  const order = players.map((p) => p.id)
+  // Players/teams are already stored in their actual play order — never reshuffle on replay.
+  const order = buildOrder(players, settings, false)
   let state = buildInitialState(players, order, settings)
   for (let i = 0; i <= turnIndex && i < turns.length; i++) {
     for (const t of turns[i].throws) {
@@ -148,8 +176,13 @@ export function applyThrow(state: EngineGameState, value: number, multiplier: 1 
     next.turnStartRemaining = remainingBefore
   }
 
+  const throwerId = active.team ? active.team.members[active.team.throwerIndex]?.id ?? null : null
+  const throwerIndexBefore = active.team ? active.team.throwerIndex : null
+
   const logEntry: LogEntry = {
     playerId: activeId,
+    throwerId,
+    throwerIndexBefore,
     throwValue: thrown,
     remainingBefore,
     remainingAfter: bust ? next.turnStartRemaining : remainingAfter,
@@ -169,6 +202,12 @@ export function applyThrow(state: EngineGameState, value: number, multiplier: 1 
   active.pointsScored += bust ? 0 : points
   active.remaining = bust ? next.turnStartRemaining : remainingAfter
   next.currentTurnThrows.push(thrown)
+
+  if (active.team && throwerId) {
+    const stats = active.team.memberStats[throwerId]
+    stats.dartsThrown += 1
+    stats.pointsScored += bust ? 0 : points
+  }
 
   if (won) {
     const alreadyFinished = Object.values(next.players).filter((p) => p.finishedPosition !== null).length
@@ -193,6 +232,10 @@ export function applyThrow(state: EngineGameState, value: number, multiplier: 1 
   next.log.push(logEntry)
 
   if (bust || won || next.currentTurnThrows.length >= 3) {
+    if (active.team) {
+      // Next time this team plays, the next member in rotation throws.
+      active.team.throwerIndex = (active.team.throwerIndex + 1) % active.team.members.length
+    }
     const nextIdx = nextUnfinishedPlayerIndex(next, next.players)
     if (nextIdx === null) {
       next.status = 'finished'
@@ -240,6 +283,15 @@ export function undoLastThrow(state: EngineGameState): EngineGameState {
   active.pointsScored = entry.pointsScoredBefore
   active.finishedPosition = null
 
+  if (active.team && entry.throwerId) {
+    const stats = active.team.memberStats[entry.throwerId]
+    stats.dartsThrown -= 1
+    stats.pointsScored -= entry.bust ? 0 : throwPoints(entry.throwValue)
+  }
+  if (active.team && entry.throwerIndexBefore !== null) {
+    active.team.throwerIndex = entry.throwerIndexBefore
+  }
+
   entry.pursuitEffects.forEach((effect) => {
     next.players[effect.playerId].remaining = effect.remainingBefore
   })
@@ -258,6 +310,12 @@ export function undoLastThrow(state: EngineGameState): EngineGameState {
 
 export function getActivePlayer(state: EngineGameState): PlayerGameState {
   return state.players[state.order[state.currentPlayerIndex]]
+}
+
+/** The person actually throwing right now — the active player, or the active team's current member. */
+export function getActiveThrower(state: EngineGameState): Player {
+  const active = getActivePlayer(state)
+  return active.team ? active.team.members[active.team.throwerIndex] : active.player
 }
 
 /** Every other player, ordered starting from whoever plays right after the active player. */
@@ -380,6 +438,7 @@ export function buildTurnHistory(state: EngineGameState): TurnRecord[] {
     } else {
       turns.push({
         playerId: entry.playerId,
+        throwerId: entry.throwerId,
         throws: [entry.throwValue],
         scoreBefore: entry.remainingBefore,
         scoreAfter: entry.remainingAfter,
@@ -399,6 +458,13 @@ export function getAverage(p: PlayerGameState): number {
   return Math.round(((p.pointsScored / p.dartsThrown) * 3) * 100) / 100
 }
 
+/** Individual average for one member of a team, based on their own darts within the team's turns. */
+export function getMemberAverage(p: PlayerGameState, memberId: string): number {
+  const stats = p.team?.memberStats[memberId]
+  if (!stats || stats.dartsThrown === 0) return 0
+  return Math.round(((stats.pointsScored / stats.dartsThrown) * 3) * 100) / 100
+}
+
 export function getStandings(state: EngineGameState): PlayerGameState[] {
   return [...state.order.map((id) => state.players[id])].sort((a, b) => {
     const posA = a.finishedPosition ?? Number.MAX_SAFE_INTEGER
@@ -406,4 +472,27 @@ export function getStandings(state: EngineGameState): PlayerGameState[] {
     if (posA !== posB) return posA - posB
     return a.remaining - b.remaining
   })
+}
+
+export type StandingsSummary = GameHistoryEntry['standings'][number]
+
+/** Standings ready to persist/display, including per-member stats for team competitors. */
+export function buildStandingsSummary(state: EngineGameState): StandingsSummary[] {
+  return getStandings(state).map((p, idx) => ({
+    playerId: p.player.id,
+    playerName: p.player.name,
+    position: p.finishedPosition ?? idx + 1,
+    dartsThrown: p.dartsThrown,
+    average: getAverage(p),
+    pursuitsWon: p.pursuitsWon,
+    remaining: p.remaining,
+    members: p.team
+      ? p.team.members.map((m) => ({
+          playerId: m.id,
+          playerName: m.name,
+          dartsThrown: p.team!.memberStats[m.id]?.dartsThrown ?? 0,
+          average: getMemberAverage(p, m.id),
+        }))
+      : undefined,
+  }))
 }

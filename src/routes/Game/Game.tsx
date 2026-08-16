@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGame } from '../../state/useGame'
 import {
   getActivePlayer,
+  getActiveThrower,
   getAverage,
   getOtherPlayers,
   getPursuitTarget,
@@ -62,6 +63,7 @@ export function Game() {
   if (!game || game.status !== 'in_progress') return null
 
   const active = getActivePlayer(game)
+  const thrower = getActiveThrower(game)
   const others = getOtherPlayers(game)
   const pursuitOpportunity = getPursuitTarget(game)
   const checkoutSuggestion = getCheckoutSuggestion(game)
@@ -105,6 +107,7 @@ export function Game() {
         dartsThrown={active.dartsThrown}
         average={getAverage(active)}
         turnThrows={game.currentTurnThrows}
+        throwerName={active.team ? thrower.name : undefined}
       />
 
       <CheckoutBanner suggestion={checkoutSuggestion} doubleOut={game.settings.doubleOut} />

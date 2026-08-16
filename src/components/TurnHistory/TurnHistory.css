@@ -99,6 +99,19 @@
   color: var(--color-text-dim);
 }
 
+.turn-history__player {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.turn-history__thrower {
+  font-size: 0.65rem;
+  color: var(--color-text-dim);
+  margin-left: 22px;
+}
+
 .turn-history__throws {
   min-width: 0;
   font-variant-numeric: tabular-nums;

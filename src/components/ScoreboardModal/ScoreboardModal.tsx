@@ -1,5 +1,5 @@
 import type { EngineGameState } from '../../state/gameEngine'
-import { getAverage, getStandings } from '../../state/gameEngine'
+import { getActiveThrower, getAverage, getMemberAverage, getStandings } from '../../state/gameEngine'
 import { PlayerBadge } from '../PlayerBadge/PlayerBadge'
 import { Icon } from '../Icon/Icon'
 import { flechetteIcon, moyenneIcon, poursuiteIcon } from '../../assets/icons'
@@ -13,6 +13,7 @@ interface ScoreboardModalProps {
 export function ScoreboardModal({ game, onClose }: ScoreboardModalProps) {
   const activeId = game.order[game.currentPlayerIndex]
   const standings = getStandings(game)
+  const thrower = getActiveThrower(game)
 
   return (
     <div className="scoreboard-modal" role="dialog" aria-modal="true">
@@ -44,6 +45,22 @@ export function ScoreboardModal({ game, onClose }: ScoreboardModalProps) {
                   <Icon src={poursuiteIcon} size="0.8em" /> {p.pursuitsWon}
                 </span>
               </div>
+              {p.team && (
+                <div className="scoreboard-modal__members">
+                  {p.team.members.map((m) => (
+                    <div key={m.id} className="scoreboard-modal__member">
+                      <span className={m.id === thrower.id && p.player.id === activeId ? 'is-throwing' : ''}>
+                        {m.name}
+                      </span>
+                      <span className="scoreboard-modal__member-stat">
+                        <Icon src={flechetteIcon} size="0.75em" /> {p.team!.memberStats[m.id]?.dartsThrown ?? 0}
+                        {' · '}
+                        <Icon src={moyenneIcon} size="0.75em" /> {getMemberAverage(p, m.id).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

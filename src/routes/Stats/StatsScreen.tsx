@@ -117,6 +117,15 @@ export function StatsScreen() {
                         <Icon src={poursuiteIcon} size="0.8em" /> {s.pursuitsWon}
                       </span>
                     </div>
+                    {s.members && (
+                      <div className="stats-screen__sub">
+                        {s.members.map((m) => (
+                          <span className="stats-screen__sub-stat" key={m.playerId}>
+                            {m.playerName} ({m.average.toFixed(2)})
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
