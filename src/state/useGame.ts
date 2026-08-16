@@ -28,7 +28,14 @@ export interface WinEvent {
 }
 
 export function useGame() {
-  const [game, setGame] = useState<EngineGameState | null>(() => getCurrentGame() as EngineGameState | null)
+  const [game, setGame] = useState<EngineGameState | null>(() => {
+    const loaded = getCurrentGame() as EngineGameState | null
+    if (loaded && loaded.turnStartRemaining === undefined) {
+      // Backward compat: games saved before turnStartRemaining existed.
+      loaded.turnStartRemaining = loaded.players[loaded.order[loaded.currentPlayerIndex]].remaining
+    }
+    return loaded
+  })
   const [pursuitEvent, setPursuitEvent] = useState<PursuitEvent | null>(null)
   const [winEvent, setWinEvent] = useState<WinEvent | null>(null)
 

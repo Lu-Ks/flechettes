@@ -146,6 +146,10 @@
   color: var(--color-accent-green);
 }
 
+.turn-history__tag--bust {
+  color: var(--color-danger);
+}
+
 .turn-history__resume-btn {
   display: block;
   width: 100%;

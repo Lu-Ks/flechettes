@@ -21,6 +21,7 @@ interface LogEntry {
   dartsThrownBefore: number
   pointsScoredBefore: number
   turnThrowsBefore: Throw[]
+  turnStartRemainingBefore: number
   currentPlayerIndexBefore: number
   bust: boolean
   statusBefore: GameState['status']
@@ -66,6 +67,7 @@ function buildInitialState(players: Player[], order: string[], settings: GameSet
     players: playerStates,
     currentPlayerIndex: 0,
     currentTurnThrows: [],
+    turnStartRemaining: settings.startScore,
     history: [],
     status: 'in_progress',
     winnerId: null,
@@ -140,14 +142,21 @@ export function applyThrow(state: EngineGameState, value: number, multiplier: 1 
   const bust = isBustAfterThrow(remainingAfter, multiplier, doubleOut)
   const won = !bust && remainingAfter === 0
 
+  const turnStartRemainingBefore = next.turnStartRemaining
+  if (next.currentTurnThrows.length === 0) {
+    // First dart of the turn: this is the score to fall back to if the turn busts.
+    next.turnStartRemaining = remainingBefore
+  }
+
   const logEntry: LogEntry = {
     playerId: activeId,
     throwValue: thrown,
     remainingBefore,
-    remainingAfter: bust ? remainingBefore : remainingAfter,
+    remainingAfter: bust ? next.turnStartRemaining : remainingAfter,
     dartsThrownBefore: active.dartsThrown,
     pointsScoredBefore: active.pointsScored,
     turnThrowsBefore: clone(next.currentTurnThrows),
+    turnStartRemainingBefore,
     currentPlayerIndexBefore: next.currentPlayerIndex,
     bust,
     statusBefore: next.status,
@@ -158,7 +167,7 @@ export function applyThrow(state: EngineGameState, value: number, multiplier: 1 
 
   active.dartsThrown += 1
   active.pointsScored += bust ? 0 : points
-  active.remaining = bust ? remainingBefore : remainingAfter
+  active.remaining = bust ? next.turnStartRemaining : remainingAfter
   next.currentTurnThrows.push(thrown)
 
   if (won) {
@@ -239,6 +248,7 @@ export function undoLastThrow(state: EngineGameState): EngineGameState {
   }
 
   next.currentTurnThrows = entry.turnThrowsBefore
+  next.turnStartRemaining = entry.turnStartRemainingBefore
   next.currentPlayerIndex = entry.currentPlayerIndexBefore
   next.status = entry.statusBefore
   next.winnerId = entry.winnerIdBefore

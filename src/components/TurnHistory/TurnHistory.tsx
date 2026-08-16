@@ -81,6 +81,11 @@ export function TurnHistory({ entry, onSelectTurn, resumeLabel = 'Rejouer à par
                   POURSUITE RÉUSSIE {targets.length > 0 && `— ${targets.join(', ')} reparti·e${targets.length > 1 ? 's' : ''} au début`}
                 </div>
               )}
+              {turn.bust && (
+                <div className="turn-history__tag turn-history__tag--bust">
+                  BUST — RETOUR À {turn.scoreAfter} PTS
+                </div>
+              )}
             </button>
 
             {isExpanded && (

@@ -49,6 +49,7 @@ export interface GameState {
   players: Record<string, PlayerGameState>
   currentPlayerIndex: number
   currentTurnThrows: Throw[]
+  turnStartRemaining: number // active player's score at the start of their current turn
   history: TurnRecord[]
   status: GameStatus
   winnerId: string | null
