@@ -33,6 +33,7 @@ export function Game() {
   const { game, throwDart, undo, finishGame, cancelGame, resumeFromHistory, pursuitEvent, winEvent } = useGame()
   const [showPursuitFx, setShowPursuitFx] = useState(false)
   const [showWinFx, setShowWinFx] = useState(false)
+  const [winnerPopupKey, setWinnerPopupKey] = useState<string | null>(null)
   const [showHistory, setShowHistory] = useState(false)
   const [showScoreboard, setShowScoreboard] = useState(false)
 
@@ -56,7 +57,11 @@ export function Game() {
   useEffect(() => {
     if (!winEvent) return
     setShowWinFx(true)
-    const timer = setTimeout(() => setShowWinFx(false), WIN_CELEBRATION_DURATION)
+    const timer = setTimeout(() => {
+      setShowWinFx(false)
+      // Pop the "terminer ou continuer" choice open on its own once the celebration is done.
+      setWinnerPopupKey(winEvent.id)
+    }, WIN_CELEBRATION_DURATION)
     return () => clearTimeout(timer)
   }, [winEvent])
 
@@ -100,7 +105,7 @@ export function Game() {
         </button>
       </header>
 
-      {winner && <WinnerBanner winner={winner.player} onFinish={finishGame} />}
+      {winner && <WinnerBanner winner={winner.player} onFinish={finishGame} autoOpenKey={winnerPopupKey} />}
 
       <ScoreDisplay
         score={active.remaining}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Player } from '../../state/types'
 import { BannerInfoModal } from '../BannerInfoModal/BannerInfoModal'
 import { PlayerBadge } from '../PlayerBadge/PlayerBadge'
@@ -8,11 +8,19 @@ import './WinnerBanner.css'
 interface WinnerBannerProps {
   winner: Player
   onFinish: () => void
+  /** Changes to a new truthy value whenever the popup should pop open on its own (e.g. right after a win). */
+  autoOpenKey?: string | null
 }
 
-export function WinnerBanner({ winner, onFinish }: WinnerBannerProps) {
+export function WinnerBanner({ winner, onFinish, autoOpenKey }: WinnerBannerProps) {
   const [closed, setClosed] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
+
+  useEffect(() => {
+    if (!autoOpenKey) return
+    setClosed(false)
+    setShowDetail(true)
+  }, [autoOpenKey])
 
   if (closed) return null
 
@@ -37,16 +45,21 @@ export function WinnerBanner({ winner, onFinish }: WinnerBannerProps) {
         >
           <PlayerBadge color={winner.color} name={winner.name} size="md" />
           <p className="winner-banner__detail-text">La partie peut continuer pour les autres, ou se terminer maintenant.</p>
-          <button
-            type="button"
-            className="winner-banner__finish"
-            onClick={() => {
-              setShowDetail(false)
-              onFinish()
-            }}
-          >
-            Terminer la partie et voir les scores
-          </button>
+          <div className="winner-banner__actions">
+            <button type="button" className="winner-banner__continue" onClick={() => setShowDetail(false)}>
+              Continuer la partie
+            </button>
+            <button
+              type="button"
+              className="winner-banner__finish"
+              onClick={() => {
+                setShowDetail(false)
+                onFinish()
+              }}
+            >
+              Terminer la partie et voir les scores
+            </button>
+          </div>
         </BannerInfoModal>
       )}
     </div>
